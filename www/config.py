@@ -48,8 +48,8 @@ def toDict(d):
 configs = config_default.configs
 
 try:
-	import config_override
-	configs = merge(configs, config_override.configs)
+	import config_local
+	configs = merge(configs, config_local.configs)
 except ImportError:
 	pass
 
