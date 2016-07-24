@@ -7,6 +7,9 @@ sina.html
 # C extensions
 *.so
 
+# pyenv file
+.python-version
+
 # Packages
 *.egg
 *.egg-info
