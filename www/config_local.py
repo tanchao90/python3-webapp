@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*-
 
 '''
-Override configurations.
+Local configurations.
 '''
 
 __author__ = 'Tan Chao'
+
 
 configs = {
 	'db': {

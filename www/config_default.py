@@ -7,6 +7,7 @@ Default configurations.
 
 __author__ = 'Tan Chao'
 
+
 configs = {
 	'debug': True,
 	'server': {

@@ -2,55 +2,66 @@
 # -*- coding: utf-8 -*-
 
 '''
-Configuration
+Configuration.
+Local config override default config.
 '''
 
 __author__ = 'Tan Chao'
 
-import config_default
 
-class Dict(dict):
-	'''
-	Simple dict but support access as x.y style.
-	'''
-	def __init__(self, names=(), values=(), **kw):
-		super(Dict, self).__init__(**kw)
-		for k, v in zip(names, values):
-			self[k] = v
+import json
+
+
+class Config(dict):
+	def __init__(self, config={}):
+		super(Config, self).__init__()
+		for key, value in config.iteritems():
+			if isinstance(value, dict):
+				self[key] = Config(value)
+			else:
+				self[key] = value
 
 	def __getattr__(self, key):
 		try:
 			return self[key]
 		except KeyError:
-			raise AttributeError(r"'Dict' object has no attribute '%s'" % key)
+			raise AttributeError("Config object has no config item '%s'" % key)
 
 	def __setattr__(self, key, value):
 		self[key] = value
 
-def merge(defaults, override):
-	r = {}
-	for k, v in defaults.items():
-		if k in override:
-			if isinstance(v, dict):
-				r[k] = merge(v, override[k])
+	def update(self, config):
+		if not config:
+			return
+		for key, value in config.iteritems():
+			if isinstance(value, dict):
+				if key in self:
+					self[key].update(value)
+				else:
+					self[key] = Config(value) # new config item
 			else:
-				r[k] = override[k]
-		else:
-			r[k] = v
-	return r
+				self[key] = value
 
-def toDict(d):
-	D = Dict()
-	for k, v in d.items():
-		D[k] = toDict(v) if isinstance(v, dict) else v
-	return D
+	def __str__(self):
+		return json.dumps(self)
 
-configs = config_default.configs
+	def __repr__(self):
+		return str(self)
+
+
+import config_default
 
 try:
 	import config_local
-	configs = merge(configs, config_local.configs)
 except ImportError:
-	pass
+	config_local = None
 
-configs = toDict(configs)
+
+configs = Config(config_default.configs)
+if config_local:
+	configs.update(config_local.configs)
+
+
+if __name__ == '__main__':
+	print 'config items json:'
+	print configs
