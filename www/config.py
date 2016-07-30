@@ -63,5 +63,5 @@ if config_local:
 
 
 if __name__ == '__main__':
-	print 'config items json:'
-	print configs
+	print('config items json:')
+	print(configs)
