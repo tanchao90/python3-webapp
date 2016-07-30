@@ -15,7 +15,7 @@ import json
 class Config(dict):
 	def __init__(self, config={}):
 		super(Config, self).__init__()
-		for key, value in config.iteritems():
+		for key, value in config.items():
 			if isinstance(value, dict):
 				self[key] = Config(value)
 			else:
@@ -33,7 +33,7 @@ class Config(dict):
 	def update(self, config):
 		if not config:
 			return
-		for key, value in config.iteritems():
+		for key, value in config.items():
 			if isinstance(value, dict):
 				if key in self:
 					self[key].update(value)
